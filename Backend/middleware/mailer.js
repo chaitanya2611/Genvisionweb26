@@ -1,38 +1,31 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
-import nodemailer from 'nodemailer';
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, 
-  auth: {
-    user: process.env.EMAIL_USER,      
-    pass: process.env.EMAIL_PASS       
-  }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendCredentials(email, password) {
-  transporter.verify((err, success) => {
-  if (err) console.log("Email transporter error:", err);
-  else console.log("✅ Email transporter ready");
-  });
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'GenVision Login Credentials',
-    text: `
-Welcome to GenVision!
+  try {
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM,
+      to: email,
+      subject: "GenVision Login Credentials",
+      html: `
+        <h2>Welcome to GenVision </h2>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Password:</b> ${password}</p>
+        <p>Please login and change your password.</p>
+        <br/>
+        <p>— Team GenVision</p>
+      `,
+    });
 
-Email: ${email}
-Password: ${password}
-
-Please login and change your password.
-`
-  });
-
-  console.log(`Email sent to ${email}`);
+    console.log(`📨 Email sent to ${email}`);
+  } catch (err) {
+    console.error("❌ Resend email error:", err);
+  }
 }
 
 export default sendCredentials;
+
 

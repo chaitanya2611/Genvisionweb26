@@ -2,16 +2,11 @@ import { google } from "googleapis";
 import Participant from "../models/Participant.js";
 import generatePassword from "./passwordGen.js";
 import sendCredentials from "./mailer.js";
-import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const keyFilePath = path.join(__dirname, "../genvisionsheetaccess-4fe2e8aa9e63.json");
-
-const auth = new google.auth.GoogleAuth({
-  keyFile: keyFilePath,
+// 🔐 ENV-based Google Auth (SECURE)
+const auth = new google.auth.JWT({
+  email: process.env.GOOGLE_CLIENT_EMAIL,
+  key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
@@ -19,6 +14,7 @@ const auth = new google.auth.GoogleAuth({
 async function generateUniqueRegId() {
   let regId;
   let exists = true;
+
   while (exists) {
     regId = "GV" + Math.floor(100000 + Math.random() * 900000);
     exists = await Participant.findOne({ registration_id: regId });
@@ -27,8 +23,7 @@ async function generateUniqueRegId() {
 }
 
 async function syncParticipants() {
-  const client = await auth.getClient();
-  const sheets = google.sheets({ version: "v4", auth: client });
+  const sheets = google.sheets({ version: "v4", auth });
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID,
@@ -46,10 +41,7 @@ async function syncParticipants() {
     if (!email || !fullName) continue;
 
     const exists = await Participant.findOne({ email });
-    if (exists) {
-      // console.log(`⏭️ Skipped existing: ${email}`);
-      continue;
-    }
+    if (exists) continue;
 
     const password = generatePassword();
     const regId = await generateUniqueRegId();
@@ -72,7 +64,7 @@ async function syncParticipants() {
       governmentId: row[16],
       groupKeyword: row[17],
       transactionId: row[18],
-      paymentStatus:"pending",
+      paymentStatus: "pending",
       registration_id: regId,
     });
 
@@ -84,4 +76,3 @@ async function syncParticipants() {
 }
 
 export default syncParticipants;
-

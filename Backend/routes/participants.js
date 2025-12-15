@@ -100,7 +100,7 @@ router.post("/participate/:eventId", auth, async (req, res) => {
 });
 
 // Optional: sync from Google Sheet
-router.get('/sync', async (req, res) => {
+router.post('/sync', async (req, res) => {
   try {
     await syncParticipants();
     res.send('Participants synced successfully');

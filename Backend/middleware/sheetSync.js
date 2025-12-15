@@ -5,8 +5,8 @@ import sendCredentials from "./mailer.js";
 
 // 🔐 ENV-based Google Auth (SECURE)
 const auth = new google.auth.JWT({
-  email: process.env.GOOGLE_CLIENT_EMAIL,
-  key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  email: process.env.CLIENT_EMAIL,
+  key: process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 

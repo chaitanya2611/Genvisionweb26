@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/Frontend/static/css/main.67bf16fe.css",
+    "main.js": "/Frontend/static/js/main.aae95eb1.js",
+    "static/js/453.eb570f4f.chunk.js": "/Frontend/static/js/453.eb570f4f.chunk.js",
+    "static/media/mainpage.png": "/Frontend/static/media/mainpage.06ca3618c99322e27fcc.png",
+    "static/media/about - Copy.jpeg": "/Frontend/static/media/about - Copy.181c66c627eea848e078.jpeg",
+    "static/media/creepster-latin-400-normal.woff": "/Frontend/static/media/creepster-latin-400-normal.746c0ca1a8475fbbe7ab.woff",
+    "static/media/creepster-latin-400-normal.woff2": "/Frontend/static/media/creepster-latin-400-normal.15e3de6798883e6c1263.woff2",
+    "index.html": "/Frontend/index.html",
+    "main.67bf16fe.css.map": "/Frontend/static/css/main.67bf16fe.css.map",
+    "main.aae95eb1.js.map": "/Frontend/static/js/main.aae95eb1.js.map",
+    "453.eb570f4f.chunk.js.map": "/Frontend/static/js/453.eb570f4f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.67bf16fe.css",
+    "static/js/main.aae95eb1.js"
+  ]
+}

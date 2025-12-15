@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: Genvision_2026
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    staticPublishPath: build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /

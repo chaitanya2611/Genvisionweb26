@@ -1,0 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+.flip-card {
+  /* perspective: 1000px; */
+  cursor: pointer;
+  border-radius: 40%;
+  max-width:fit-content;
+  height: 300px;  /* card ची full height, 300px image + काही back content */
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  transition: transform 0.6s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 300px;
+  backface-visibility: hidden;
+  border-radius: 40%;
+  overflow: hidden;
+}
+
+/* FRONT SIDE */
+.flip-card-front {
+  font-family: "Poppins", sans-serif;
+}
+
+/* BACK SIDE */
+.flip-card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, rgba(20, 30, 48, 0.9), rgba(36, 59, 85, 0.9));
+  color: #f8f9fa;
+  font-family: "Poppins", sans-serif;
+  box-shadow: 0 0 25px rgba(36, 59, 85, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.flip-card-back .back-overlay {
+  padding: 25px;
+  text-align: center;
+}
+
+.flip-card-back h4 {
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.flip-card-back p {
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+/* gold decorative line */
+.decor-line {
+  width: 60%;
+  height: 2px;
+  margin: 10px auto;
+  background: linear-gradient(90deg, #ffd700, #fff8dc, #ffd700);
+  border-radius: 40%;
+  animation: glow 2s infinite alternate;
+}
+
+/* subtle glow animation */
+@keyframes glow {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* hover effect for flipped card */
+.flip-card.flipped .flip-card-back {
+  transform: rotateY(180deg) scale(1.02);
+  transition: transform 0.4s ease-in-out;
+}
+
+

@@ -1,0 +1,16 @@
+.hero {
+  height: 90vh;
+  background: linear-gradient(to bottom right, #1a1a2e, #16213e);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero h1 {
+  letter-spacing: 1px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+}

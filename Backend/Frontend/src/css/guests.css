@@ -1,0 +1,89 @@
+.guest-card {
+  width: 280px;
+  height: 380px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  background: #fff;
+  transition: transform 0.3s ease;
+}
+
+.guest-card:hover {
+  transform: translateY(-5px);
+}
+
+.guest-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.guest-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease, filter 0.6s ease;
+}
+
+.guest-card:hover .guest-img {
+  transform: scale(1.1);
+  filter: brightness(70%) blur(2px);
+}
+
+/* Overlay */
+.guest-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* top se start */
+  align-items: flex-start;
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+
+.guest-card:hover .guest-overlay {
+  opacity: 1;
+}
+
+/* Text Styles */
+.guest-overlay h4,
+.guest-overlay .designation,
+.guest-overlay .desc {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.guest-card:hover .guest-overlay h4,
+.guest-card:hover .guest-overlay .designation,
+.guest-card:hover .guest-overlay .desc {
+  opacity: 1; /* all text fade in simultaneously */
+}
+
+.guest-overlay h4 {
+  font-size: 1.25rem;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.guest-overlay .designation {
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.guest-overlay .desc {
+  font-size: 0.9rem;
+  margin-top: 8px;
+  color: #f1f1f1;
+  max-height: 200px;
+  overflow-y: auto;
+}

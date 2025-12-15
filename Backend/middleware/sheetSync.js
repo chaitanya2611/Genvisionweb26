@@ -1,6 +1,6 @@
 import { google } from "googleapis";
 import Participant from "../models/Participant.js";
-import generatePassword from "./passwordGen.js";
+// import generatePassword from "./passwordGen.js";
 import sendCredentials from "./mailer.js";
 
 // 🔐 ENV-based Google Auth (SECURE)
@@ -43,14 +43,13 @@ async function syncParticipants() {
     const exists = await Participant.findOne({ email });
     if (exists) continue;
 
-    const password = generatePassword();
+    // const password = generatePassword();
     const regId = await generateUniqueRegId();
 
     const participant = new Participant({
       timestamp: Date.now(),
       email,
       fullName,
-      password,
       mobileNumber: row[5],
       whatsappNumber: row[6],
       gender: row[7],
@@ -69,7 +68,7 @@ async function syncParticipants() {
     });
 
     await participant.save();
-    await sendCredentials(email, password);
+    // await sendCredentials(email, password);
 
     console.log(`✅ Participant added: ${email} | reg_id: ${regId}`);
   }

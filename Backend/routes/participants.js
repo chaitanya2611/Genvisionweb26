@@ -2,6 +2,9 @@ import express from "express";
 import auth from "../middleware/participantAuth.js";
 import Participant from "../models/Participant.js";
 import Event from "../models/Event.js";
+import generatePassword from "../middleware/passwordGen.js";
+import sendCredentials from "../middleware/mailer.js";
+import bcrypt from "bcryptjs";
 import {
   getAllParticipants,
   addParticipant,
@@ -12,6 +15,29 @@ import syncParticipants from "../middleware/sheetSync.js";
 
 const router = express.Router();
 
+async function updatePasswordAndSendMail(participantId) {
+  const participant = await Participant.findById(participantId);
+  if (!participant) throw new Error("Participant not found");
+
+  // Already sent check (optional)
+  if (participant.confirmationEmailSent) {
+    return { alreadySent: true };
+  }
+
+  // 1️⃣ Generate new password
+  const plainPassword = generatePassword();
+
+  // 2️⃣ Send email first
+  await sendCredentials(participant.email, plainPassword);
+
+  // 3️⃣ Hash password & update DB
+  const hashedPassword = await bcrypt.hash(plainPassword, 10);
+  participant.password = hashedPassword;
+  participant.confirmationEmailSent = true;
+  await participant.save();
+
+  return { success: true };
+}
 // Admin CRUD
 router.get("/", getAllParticipants);
 router.post("/", addParticipant);
@@ -96,6 +122,17 @@ router.post("/participate/:eventId", auth, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+router.post("/send-confirmation/:id", async (req, res) => {
+  try {
+    const result = await updatePasswordAndSendMail(req.params.id);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

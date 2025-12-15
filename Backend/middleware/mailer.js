@@ -11,13 +11,20 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendCredentials(email, password) {
+  // 🔥 SANITIZE EMAIL (VERY IMPORTANT)
+  const cleanEmail = email.replace(/['"\s]/g, "").trim();
+
+  console.log("📧 Sending to:", cleanEmail);
+
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
+    from: `"GenVision Team" <${process.env.EMAIL_USER}>`,
+    to: cleanEmail, // ✅ NO QUOTES
     subject: "GenVision Login Credentials",
-    text: `Email: ${email}\nPassword: ${password}`,
+    text: `Email: ${cleanEmail}\nPassword: ${password}`,
   });
-  console.log(`📨 Email sent to ${email}`);
+
+  console.log(`📨 Email sent to ${cleanEmail}`);
 }
 
 export default sendCredentials;
+

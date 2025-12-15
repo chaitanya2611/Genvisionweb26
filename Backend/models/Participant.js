@@ -85,6 +85,11 @@ const participantSchema = new mongoose.Schema({
     }
   ],
 
+  confirmationEmailSent: {
+  type: Boolean,
+  default: false,
+},
+
   // 🔹 System fields
   registration_id: {
     type: String,

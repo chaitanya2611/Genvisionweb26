@@ -7,7 +7,6 @@ const adminSchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
-      match: [/^[a-zA-Z0-9._%+-]+@iitb\.ac\.in$/, "Only @iitb.ac.in email allowed"],
     },
     password: {
       type: String,

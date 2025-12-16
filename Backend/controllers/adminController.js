@@ -7,6 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "genvision_secret";
 // 📍 Register Admin (IITB only)
 export const registerAdmin = async (req, res) => {
   try {
+    console.log("🔥 ADMIN REGISTER HIT 🔥");
     const { email, password } = req.body;
 
     // 🔒 IITB email hard check

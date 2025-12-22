@@ -13,6 +13,15 @@ const eventSchema = new mongoose.Schema({
       ref: "Participant"
     }
   ],
+    maxParticipants: {
+    type: Number,
+    required: true,
+  },
+
+  currentParticipants: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export default mongoose.model("Event", eventSchema);

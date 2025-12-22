@@ -124,9 +124,9 @@ router.post("/participate/:eventId", auth, async (req, res) => {
       }
 
       // 🔒 CAP CHECK (MOST IMPORTANT)
-      // if (event.currentParticipants >= event.maxParticipants) {
-      //   return res.status(400).json({ message: "Event Full" });
-      // }
+      if (event.currentParticipants >= event.maxParticipants) {
+        return res.status(400).json({ message: "Event Full" });
+      }
 
       participant.events.push(event._id);
       event.participants.push(participant._id);

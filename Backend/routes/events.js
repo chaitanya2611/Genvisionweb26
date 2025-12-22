@@ -1,19 +1,11 @@
 import express from "express";
-// import {
-//   getAllEvents,
-//   createEvent,
-//   updateEvent,
-//   deleteEvent,
-//   getEventById,
-// } from "../controllers/eventController.js";
 import Event from "../models/Event.js";
 import upload from "../middleware/upload.js";
 import Participant from "../models/Participant.js";
 
-
 const router = express.Router();
 
-// Routes
+/* ================= GET ALL EVENTS ================= */
 router.get("/", async (req, res) => {
   try {
     const events = await Event.find();
@@ -23,66 +15,105 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ➕ Add Event with image upload
+/* ================= CREATE EVENT ================= */
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-  const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
-  const event = await Event.create({ ...req.body, image: imagePath });
+    const {
+      name,
+      description,
+      date,
+      time,
+      venue,
+      maxParticipants,
+    } = req.body;
+
+    if (!maxParticipants) {
+      return res
+        .status(400)
+        .json({ message: "maxParticipants is required" });
+    }
+
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
+
+    const event = new Event({
+      name,
+      description,
+      date,
+      time,
+      venue,
+      image: imagePath,
+      maxParticipants: Number(maxParticipants), // 🔥 MOST IMPORTANT
+      currentParticipants: 0,
+    });
+
     await event.save();
     res.status(201).json(event);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 });
 
-// ✏️ Update event
+/* ================= UPDATE EVENT ================= */
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, date, venue,description } = req.body;
+    const {
+      name,
+      description,
+      date,
+      time,
+      venue,
+      maxParticipants,
+    } = req.body;
 
     const event = await Event.findById(id);
-    if (!event) return res.status(404).json({ message: "Not found" });
+    if (!event)
+      return res.status(404).json({ message: "Event not found" });
 
     event.name = name || event.name;
-    event.date = date || event.date;
-    event.venue = venue || event.venue;
     event.description = description || event.description;
-    if (req.file) event.image = `/uploads/${req.file.filename}`;
+    event.date = date || event.date;
+    event.time = time || event.time;
+    event.venue = venue || event.venue;
+
+    if (maxParticipants !== undefined) {
+      event.maxParticipants = Number(maxParticipants); // 🔥
+    }
+
+    if (req.file) {
+      event.image = `/uploads/${req.file.filename}`;
+    }
 
     await event.save();
     res.json(event);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: err.message });
   }
 });
 
+/* ================= EVENT PARTICIPANTS ================= */
 router.get("/:id/participants", async (req, res) => {
-  const eventId = req.params.id;
-
   try {
-    const participants = await Participant.find({ events: eventId }).select("-password");
+    const participants = await Participant.find({
+      events: req.params.id,
+    }).select("-password");
+
     res.json(participants);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
 
-
-// 🗑 Delete event
+/* ================= DELETE EVENT ================= */
 router.delete("/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    await Event.findByIdAndDelete(id);
+    await Event.findByIdAndDelete(req.params.id);
     res.json({ message: "Event deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-
-
-
 export default router;
-

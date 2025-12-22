@@ -79,73 +79,59 @@ router.get("/dashboard", auth, async (req, res) => {
 });
 
 router.post("/participate/:eventId", auth, async (req, res) => {
-  const { eventId } = req.params;
-  const { cancel } = req.body;
-
   try {
-    const participant = await Participant.findById(req.participant._id);
+    const participantId = req.user.id;
+    const { eventId } = req.params;
+    const { cancel } = req.body;
+
+    const participant = await Participant.findById(participantId);
     const event = await Event.findById(eventId);
 
     if (!participant || !event) {
       return res.status(404).json({ message: "Participant or Event not found" });
     }
 
-    const eventIdStr = eventId.toString();
-    const participantIdStr = participant._id.toString();
+    const alreadyParticipated = participant.events.includes(eventId);
 
-    const alreadyParticipated = participant.events.some(
-      (e) => e.toString() === eventIdStr
-    );
-
-    /* ================= CANCEL ================= */
+    // ❌ CANCEL PARTICIPATION
     if (cancel) {
       if (!alreadyParticipated) {
         return res.status(400).json({ message: "Not participated yet" });
       }
 
-      participant.events = participant.events.filter(
-        (e) => e.toString() !== eventIdStr
+      participant.events.pull(eventId);
+      event.currentParticipants = Math.max(
+        event.currentParticipants - 1,
+        0
       );
 
-      event.participants = event.participants.filter(
-        (p) => p.toString() !== participantIdStr
-      );
+      await participant.save();
+      await event.save();
 
-      // 🔻 decrement count safely
-      if (event.currentParticipants > 0) {
-        event.currentParticipants -= 1;
-      }
+      return res.json({ message: "Participation cancelled" });
     }
 
-    /* ================= ADD ================= */
-    else {
-      if (alreadyParticipated) {
-        return res.status(400).json({ message: "Already participated" });
-      }
-
-      // 🔒 CAP CHECK (MOST IMPORTANT)
-      if (event.currentParticipants >= event.maxParticipants) {
-        return res.status(400).json({ message: "Event Full" });
-      }
-
-      participant.events.push(event._id);
-      event.participants.push(participant._id);
-
-      // 🔺 increment count
-      event.currentParticipants += 1;
+    // ❌ DOUBLE PARTICIPATION CHECK
+    if (alreadyParticipated) {
+      return res.status(400).json({ message: "Already participated" });
     }
+
+    // ❌ EVENT FULL CHECK (MOST IMPORTANT)
+    if (event.currentParticipants >= event.maxParticipants) {
+      return res.status(400).json({ message: "Event full" });
+    }
+
+    // ✅ PARTICIPATE
+    participant.events.push(eventId);
+    event.currentParticipants += 1;
 
     await participant.save();
     await event.save();
 
-    res.json({
-      message: cancel
-        ? "Participation cancelled successfully"
-        : "Participation confirmed successfully",
-    });
+    res.json({ message: "Participation successful" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Participation failed" });
   }
 });
 

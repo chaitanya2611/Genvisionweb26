@@ -11,11 +11,11 @@ export const registerAdmin = async (req, res) => {
     const { email, password } = req.body;
 
     // 🔒 IITB email hard check
-    // if (!email.endsWith("@iitb.ac.in")) {
-    //   return res
-    //     .status(403)
-    //     .json({ message: "Only @iitb.ac.in admin allowed" });
-    // }
+    if (!email.endsWith("@iitb.ac.in")) {
+      return res
+        .status(403)
+        .json({ message: "Only @iitb.ac.in admin allowed" });
+    }
 
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {

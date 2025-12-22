@@ -16,21 +16,21 @@ export const registerAdmin = async (req, res) => {
         .status(403)
         .json({ message: "Only @iitb.ac.in admin allowed" });
     }
-
+console.log("REQ BODY 👉", req.body);
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
       return res.status(400).json({ message: "Admin already exists" });
     }
 
     const hashed = await bcrypt.hash(password, 10);
-
+console.log("REQ BODY 👉", req.body);
     const newAdmin = new Admin({
       email,
       password: hashed,
     });
-
+console.log("REQ BODY 👉", req.body);
     await newAdmin.save();
-
+console.log("REQ BODY 👉", req.body);
     res.status(201).json({ message: "Admin registered successfully" });
   } catch (err) {
     res.status(400).json({ error: err.message });

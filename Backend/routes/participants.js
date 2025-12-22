@@ -80,7 +80,7 @@ router.get("/dashboard", auth, async (req, res) => {
 
 router.post("/participate/:eventId", auth, async (req, res) => {
   try {
-    const participantId = req.user.id;
+  const participantId = req.participant.id;
     const { eventId } = req.params;
     const { cancel } = req.body;
 

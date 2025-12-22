@@ -86,29 +86,53 @@ router.post("/participate/:eventId", auth, async (req, res) => {
     const participant = await Participant.findById(req.participant._id);
     const event = await Event.findById(eventId);
 
-    if (!participant || !event)
+    if (!participant || !event) {
       return res.status(404).json({ message: "Participant or Event not found" });
+    }
 
     const eventIdStr = eventId.toString();
+    const participantIdStr = participant._id.toString();
 
+    const alreadyParticipated = participant.events.some(
+      (e) => e.toString() === eventIdStr
+    );
+
+    /* ================= CANCEL ================= */
     if (cancel) {
-      // REMOVE
+      if (!alreadyParticipated) {
+        return res.status(400).json({ message: "Not participated yet" });
+      }
+
       participant.events = participant.events.filter(
         (e) => e.toString() !== eventIdStr
       );
 
       event.participants = event.participants.filter(
-        (p) => p.toString() !== participant._id.toString()
+        (p) => p.toString() !== participantIdStr
       );
-    } else {
-      // ADD (SAFE)
-      if (!participant.events.some(e => e.toString() === eventIdStr)) {
-        participant.events.push(event._id);
+
+      // 🔻 decrement count safely
+      if (event.currentParticipants > 0) {
+        event.currentParticipants -= 1;
+      }
+    }
+
+    /* ================= ADD ================= */
+    else {
+      if (alreadyParticipated) {
+        return res.status(400).json({ message: "Already participated" });
       }
 
-      if (!event.participants.some(p => p.toString() === participant._id.toString())) {
-        event.participants.push(participant._id);
-      }
+      // 🔒 CAP CHECK (MOST IMPORTANT)
+      // if (event.currentParticipants >= event.maxParticipants) {
+      //   return res.status(400).json({ message: "Event Full" });
+      // }
+
+      participant.events.push(event._id);
+      event.participants.push(participant._id);
+
+      // 🔺 increment count
+      event.currentParticipants += 1;
     }
 
     await participant.save();
@@ -116,14 +140,15 @@ router.post("/participate/:eventId", auth, async (req, res) => {
 
     res.json({
       message: cancel
-        ? "Participation cancelled"
-        : "Participation confirmed",
+        ? "Participation cancelled successfully"
+        : "Participation confirmed successfully",
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 router.post("/send-confirmation/:id", async (req, res) => {

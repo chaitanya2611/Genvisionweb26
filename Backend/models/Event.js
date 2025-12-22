@@ -12,7 +12,7 @@ const eventSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Participant"
     }
-  ]
+  ],
 });
 
 export default mongoose.model("Event", eventSchema);

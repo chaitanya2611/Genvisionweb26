@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import cron from "cron";
 import https from "https";
 import startAutoSync from "./middleware/autoSync.js";
-
+import Event from "./models/Event.js";
 
 
 
@@ -53,9 +53,12 @@ app.use("/api/about", aboutRouter);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 startAutoSync();
 
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.log(err));
+    const events = await Event.find();
+    console.log(events);
 
   const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

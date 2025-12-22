@@ -2,7 +2,7 @@ import { useState } from "react";
 import API from "../api";
 
 export default function AdminRegister() {
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,8 +26,8 @@ export default function AdminRegister() {
       >
         <input
           type="text"
-          name="username"
-          placeholder="Username"
+          name="email"
+          placeholder="email"
           onChange={handleChange}
           className="w-full p-2 mb-3 rounded bg-gray-700"
         />

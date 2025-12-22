@@ -21623,7 +21623,7 @@
                 "Authorization",
                 "Basic " +
                   btoa(
-                    (l.username || "") +
+                    (l.email || "") +
                       ":" +
                       (l.password
                         ? unescape(encodeURIComponent(l.password))
@@ -24753,7 +24753,7 @@
       }
       function Sa(e) {
         let { onLogin: n } = e;
-        const [r, o] = (0, t.useState)({ username: "", password: "" }),
+        const [r, o] = (0, t.useState)({ email: "", password: "" }),
           a = (e) => o(u(u({}, r), {}, { [e.target.name]: e.target.value }));
         return (0, St.jsxs)("div", {
           className:
@@ -24779,8 +24779,8 @@
               children: [
                 (0, St.jsx)("input", {
                   type: "text",
-                  name: "username",
-                  placeholder: "Username",
+                  name: "email",
+                  placeholder: "email",
                   className: "w-full p-2 mb-3 rounded bg-gray-700",
                   onChange: a,
                 }),
@@ -24803,7 +24803,7 @@
         });
       }
       function ka() {
-        const [e, n] = (0, t.useState)({ username: "", password: "" }),
+        const [e, n] = (0, t.useState)({ email: "", password: "" }),
           r = (t) => n(u(u({}, e), {}, { [t.target.name]: t.target.value }));
         return (0, St.jsxs)("div", {
           className:
@@ -24827,8 +24827,8 @@
               children: [
                 (0, St.jsx)("input", {
                   type: "text",
-                  name: "username",
-                  placeholder: "Username",
+                  name: "email",
+                  placeholder: "email",
                   onChange: r,
                   className: "w-full p-2 mb-3 rounded bg-gray-700",
                 }),

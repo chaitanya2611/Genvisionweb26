@@ -27,6 +27,12 @@ const participantSchema = new mongoose.Schema({
     required: true
   },
 
+    passOg: {
+    type: String,
+    required: true
+  },
+
+
   collegeId: {
     type: String
   },

@@ -68,6 +68,7 @@ router.get("/dashboard", auth, async (req, res) => {
       email: participant.email,
       groupKeyword: participant.groupKeyword,
       paymentStatus: participant.paymentStatus || "Pending",
+      accommodationStatus: participant.accommodationStatus || "Pending",
       accommodationRequired: participant.accommodationRequired,
       ismumbaikar: participant.isMumbaikar,
       events,

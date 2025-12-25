@@ -64,6 +64,7 @@ router.get("/dashboard", auth, async (req, res) => {
         .map((e) => e.toString())
         .includes(event._id.toString()),
     }));
+    console.log("Fetched dashboard data:", res.data);
 
     res.json({
       fullName: participant.fullName,

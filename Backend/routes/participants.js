@@ -64,7 +64,6 @@ router.get("/dashboard", auth, async (req, res) => {
         .map((e) => e.toString())
         .includes(event._id.toString()),
     }));
-    console.log("Fetched dashboard data:", res.data);
 
     res.json({
       fullName: participant.fullName,
@@ -75,7 +74,6 @@ router.get("/dashboard", auth, async (req, res) => {
       accommodationStatus: participant.accommodationStatus || "Pending",
       accommodationRequired: participant.accommodationRequired,
       ismumbaikar: participant.isMumbaikar,
-      participatedEvents: participant.events,
       events,
     });
   } catch (err) {

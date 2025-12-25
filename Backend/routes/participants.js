@@ -47,7 +47,9 @@ router.delete("/:id", deleteParticipant);
 // GET dashboard
 router.get("/dashboard", auth, async (req, res) => {
   try {
-    const participant = await Participant.findById(req.participant._id).select("-password");
+    const participant = await Participant.findById(req.participant._id).select(
+      "-password"
+    );
     if (!participant) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -66,6 +68,7 @@ router.get("/dashboard", auth, async (req, res) => {
     res.json({
       fullName: participant.fullName,
       email: participant.email,
+      registration_id: participant.registration_id,
       groupKeyword: participant.groupKeyword,
       paymentStatus: participant.paymentStatus || "Pending",
       accommodationStatus: participant.accommodationStatus || "Pending",
@@ -81,7 +84,7 @@ router.get("/dashboard", auth, async (req, res) => {
 
 router.post("/participate/:eventId", auth, async (req, res) => {
   try {
-  const participantId = req.participant.id;
+    const participantId = req.participant.id;
     const { eventId } = req.params;
     const { cancel } = req.body;
 
@@ -89,7 +92,9 @@ router.post("/participate/:eventId", auth, async (req, res) => {
     const event = await Event.findById(eventId);
 
     if (!participant || !event) {
-      return res.status(404).json({ message: "Participant or Event not found" });
+      return res
+        .status(404)
+        .json({ message: "Participant or Event not found" });
     }
 
     const alreadyParticipated = participant.events.includes(eventId);
@@ -101,10 +106,7 @@ router.post("/participate/:eventId", auth, async (req, res) => {
       }
 
       participant.events.pull(eventId);
-      event.currentParticipants = Math.max(
-        event.currentParticipants - 1,
-        0
-      );
+      event.currentParticipants = Math.max(event.currentParticipants - 1, 0);
 
       await participant.save();
       await event.save();
@@ -136,8 +138,6 @@ router.post("/participate/:eventId", auth, async (req, res) => {
   }
 });
 
-
-
 router.post("/send-confirmation/:id", async (req, res) => {
   try {
     const result = await updatePasswordAndSendMail(req.params.id);
@@ -149,10 +149,10 @@ router.post("/send-confirmation/:id", async (req, res) => {
 });
 
 // Optional: sync from Google Sheet
-router.post('/sync', async (req, res) => {
+router.post("/sync", async (req, res) => {
   try {
     await syncParticipants();
-    res.send('Participants synced successfully');
+    res.send("Participants synced successfully");
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -161,8 +161,11 @@ router.post('/sync', async (req, res) => {
 // Optional: admin get single participant by ID
 router.get("/:id", auth, async (req, res) => {
   try {
-    const participant = await Participant.findById(req.params.id).select("-password");
-    if (!participant) return res.status(404).json({ message: "User not found" });
+    const participant = await Participant.findById(req.params.id).select(
+      "-password"
+    );
+    if (!participant)
+      return res.status(404).json({ message: "User not found" });
     res.json(participant);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
@@ -170,5 +173,3 @@ router.get("/:id", auth, async (req, res) => {
 });
 
 export default router;
-
-

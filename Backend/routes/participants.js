@@ -74,6 +74,7 @@ router.get("/dashboard", auth, async (req, res) => {
       accommodationStatus: participant.accommodationStatus || "Pending",
       accommodationRequired: participant.accommodationRequired,
       ismumbaikar: participant.isMumbaikar,
+      participatedEvents: participant.events,
       events,
     });
   } catch (err) {

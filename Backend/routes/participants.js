@@ -60,6 +60,7 @@ router.get("/dashboard", auth, async (req, res) => {
       _id: event._id,
       title: event.title,
       image: event.image,
+      rules: event.rules,
       participated: participant.events
         .map((e) => e.toString())
         .includes(event._id.toString()),

@@ -4,16 +4,16 @@ const eventSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: String,
   image: { type: String },
-  date: { type: Date},
-  venue: { type: String, },
+  date: { type: Date },
+  venue: { type: String },
 
   participants: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Participant"
-    }
+      ref: "Participant",
+    },
   ],
-    maxParticipants: {
+  maxParticipants: {
     type: Number,
     required: true,
   },
@@ -22,7 +22,10 @@ const eventSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  rules: {
+    type: [String],
+    default: [],
+  },
 });
 
 export default mongoose.model("Event", eventSchema);
-

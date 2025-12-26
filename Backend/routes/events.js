@@ -18,19 +18,16 @@ router.get("/", async (req, res) => {
 /* ================= CREATE EVENT ================= */
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-    const {
-      name,
-      description,
-      date,
-      time,
-      venue,
-      maxParticipants,
-    } = req.body;
+    const { name, description, date, time, venue, maxParticipants } = req.body;
+
+    // 🔥 RULES HANDLE (array or single)
+    let rules = req.body.rules || [];
+    if (!Array.isArray(rules)) {
+      rules = [rules];
+    }
 
     if (!maxParticipants) {
-      return res
-        .status(400)
-        .json({ message: "maxParticipants is required" });
+      return res.status(400).json({ message: "maxParticipants is required" });
     }
 
     const imagePath = req.file ? `/uploads/${req.file.filename}` : "";
@@ -42,8 +39,9 @@ router.post("/", upload.single("image"), async (req, res) => {
       time,
       venue,
       image: imagePath,
-      maxParticipants: Number(maxParticipants), // 🔥 MOST IMPORTANT
+      maxParticipants: Number(maxParticipants),
       currentParticipants: 0,
+      rules, // 🔥 SAVED TO DB
     });
 
     await event.save();
@@ -58,18 +56,15 @@ router.post("/", upload.single("image"), async (req, res) => {
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      name,
-      description,
-      date,
-      time,
-      venue,
-      maxParticipants,
-    } = req.body;
+    const { name, description, date, time, venue, maxParticipants } = req.body;
+
+    let rules = req.body.rules;
+    if (rules && !Array.isArray(rules)) {
+      rules = [rules];
+    }
 
     const event = await Event.findById(id);
-    if (!event)
-      return res.status(404).json({ message: "Event not found" });
+    if (!event) return res.status(404).json({ message: "Event not found" });
 
     event.name = name || event.name;
     event.description = description || event.description;
@@ -78,7 +73,11 @@ router.put("/:id", upload.single("image"), async (req, res) => {
     event.venue = venue || event.venue;
 
     if (maxParticipants !== undefined) {
-      event.maxParticipants = Number(maxParticipants); // 🔥
+      event.maxParticipants = Number(maxParticipants);
+    }
+
+    if (rules) {
+      event.rules = rules; // 🔥 UPDATE RULES
     }
 
     if (req.file) {

@@ -12,6 +12,7 @@ import {
   deleteParticipant,
 } from "../controllers/participantController.js";
 import syncParticipants from "../middleware/sheetSync.js";
+import syncColleges from "../middleware/syncColleges.js";
 
 const router = express.Router();
 
@@ -154,6 +155,16 @@ router.post("/sync", async (req, res) => {
   try {
     await syncParticipants();
     res.send("Participants synced successfully");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+// Optional: sync from Google Sheet
+router.post("/syncColleges", async (req, res) => {
+  try {
+    await syncColleges();
+    res.send("Colleges synced successfully");
   } catch (err) {
     res.status(500).send(err.message);
   }

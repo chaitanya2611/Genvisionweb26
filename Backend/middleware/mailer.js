@@ -5,8 +5,8 @@ dotenv.config();
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.EMAIL_USER1,
+    pass: process.env.EMAIL_PASS1,
   },
 });
 
@@ -16,7 +16,7 @@ async function sendCredentials(email, password) {
   console.log("📧 Sending to:", cleanEmail);
 
   await transporter.sendMail({
-    from: `"Team Symbiotek | Genvision 2026" <${process.env.EMAIL_USER}>`,
+    from: `"Team Symbiotek | Genvision 2026" <${process.env.EMAIL_USER1}>`,
     to: cleanEmail,
     subject: "🎉 Genvision 2026 Registration Confirmed | Welcome to BIOFUSION",
     html: `

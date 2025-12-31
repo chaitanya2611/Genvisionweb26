@@ -14,7 +14,7 @@ async function syncColleges() {
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID2,
-    range: "'Sheet1'!A:Z",
+    range: "'Draft- 2'!A:Z",
   });
 
   const rows = res.data.values;

@@ -9,15 +9,10 @@ import https from "https";
 import startAutoSync from "./middleware/autoSync.js";
 import Event from "./models/Event.js";
 
-
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Serve frontend build
-
-
-
 
 import eventRoutes from "./routes/events.js";
 import participantRoutes from "./routes/participants.js";
@@ -29,8 +24,8 @@ import studentRoutes from "./routes/student.js";
 import authRoutes from "./routes/auth_routes.js";
 import forgotPasswordRoutes from "./routes/forgotPassword.js";
 import passwordRoutes from "./routes/password_routes.js";
+import collegeRoutes from "./routes/collegeRoutes.js";
 // import paymentRoutes from "./routes/payment.js";
-
 
 dotenv.config();
 const app = express();
@@ -50,22 +45,20 @@ app.use("/api/forgot-password", forgotPasswordRoutes);
 app.use("/api/password", passwordRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/about", aboutRouter);
+app.use("/api/colleges", collegeRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 startAutoSync();
 
-
-mongoose.connect(process.env.MONGO_URI)
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.log(err));
-    const events = await Event.find();
-    console.log(events);
+const events = await Event.find();
+console.log(events);
 
-  const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-
-
 
 app.get(/^\/.*$/, (req, res) => {
   res.sendFile(path.join(__dirname, "Frontend/build", "index.html"));
 });
-

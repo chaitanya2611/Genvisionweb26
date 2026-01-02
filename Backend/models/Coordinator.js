@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const coordinatorSchema = new mongoose.Schema({
   name: { type: String, required: true },
   designation: String,
-  contact: String,
+  contact: { type: String, unique: true },
   image: String,
 
   // multiple events he/she coordinates

@@ -1,6 +1,7 @@
 import express from "express";
 import Coordinator from "../models/Coordinator.js";
 import upload from "../middleware/upload.js";
+import syncCoordinators from "../middleware/syncCoordinator.js";
 
 const router = express.Router();
 
@@ -63,6 +64,17 @@ router.delete("/:id", async (req, res) => {
     res.json({ message: "Coordinator deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// 🔄 Sync coordinators from Google Sheet
+router.post("/sync", async (req, res) => {
+  try {
+    await syncCoordinators();
+    res.status(200).json({ message: "Coordinators synced successfully ✅" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Sync failed ❌" });
   }
 });
 

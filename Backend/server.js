@@ -26,6 +26,7 @@ import forgotPasswordRoutes from "./routes/forgotPassword.js";
 import passwordRoutes from "./routes/password_routes.js";
 import collegeRoutes from "./routes/collegeRoutes.js";
 // import paymentRoutes from "./routes/payment.js";
+import massmailRoutes from "./routes/massmail.js";
 
 dotenv.config();
 const app = express();
@@ -40,6 +41,7 @@ app.use("/api/participants", participantRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/guests", guestRoutes);
 app.use("/api/coordinators", coordinatorRoutes);
+app.use("/api/massmail", massmailRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/forgot-password", forgotPasswordRoutes);
 app.use("/api/password", passwordRoutes);

@@ -27,7 +27,7 @@ async function syncParticipants() {
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID1,
-    range: "'Sheet1'!A:Z",
+    range: "'Form responses 1'!A:Z",
   });
 
   const rows = res.data.values;

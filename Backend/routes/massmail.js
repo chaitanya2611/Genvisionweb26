@@ -15,17 +15,25 @@ router.post("/send-mass-mail", async (req, res) => {
     console.log("📩 Mass mail initialization started");
     console.log(`👥 Total recipients: ${participants.length}`);
 
-    const SUBJECT = "Reminder: Genvision Event Registration";
+    const SUBJECT = "Join Genvision Community for Event Updates 🚀";
 
     const MESSAGE = `
-      <p>This is a gentle reminder regarding the Genvision events.</p>
-      <p>If you are interested and have not registered yet, we encourage you to complete your event registration at the earliest.</p>
-      <p>We have already shared login credentials.</p>
-      <p>If you have already registered, kindly ignore this mail.</p>
-      <br/>
-      <p>We look forward to your participation.</p>
-      <p>— Team Genvision</p>
-    `;
+  <p>We’re excited to have you with us for <strong>Genvision</strong> events! 🎉</p>
+
+  <p>To stay updated with important announcements, schedules, and live updates, we invite you to join our official Genvision WhatsApp Community.</p>
+
+  <p><strong>👉 Join here:</strong><br/>
+  <a href="https://chat.whatsapp.com/EKGdRB2F6DkBQCf8qtC7hE">
+    Genvision WhatsApp Community
+  </a></p>
+
+  <p><strong>Note:</strong> Before joining the group, please make sure you have enrolled and registered for the events.</p>
+  <p>Kindly ignore this message if you have already joined the group.</p>
+
+  <br/>
+  <p>See you at the Genvision! 🚀</p>
+  <p>— Team Genvision</p>
+`;
 
     for (let i = 0; i < participants.length; i++) {
       const p = participants[i];

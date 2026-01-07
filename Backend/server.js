@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import cron from "cron";
 import https from "https";
 import startAutoSync from "./middleware/autoSync.js";
+import syncHunters from "./middleware/treasureHunt.js";
 import Event from "./models/Event.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +28,7 @@ import passwordRoutes from "./routes/password_routes.js";
 import collegeRoutes from "./routes/collegeRoutes.js";
 // import paymentRoutes from "./routes/payment.js";
 import massmailRoutes from "./routes/massmail.js";
+import leaderboardRoutes from "./routes/leaderboard.js";
 
 dotenv.config();
 const app = express();
@@ -42,6 +44,7 @@ app.use("/api/students", studentRoutes);
 app.use("/api/guests", guestRoutes);
 app.use("/api/coordinators", coordinatorRoutes);
 app.use("/api/massmail", massmailRoutes);
+app.use("/api/leaderboard", leaderboardRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/forgot-password", forgotPasswordRoutes);
 app.use("/api/password", passwordRoutes);
@@ -50,6 +53,7 @@ app.use("/api/about", aboutRouter);
 app.use("/api/colleges", collegeRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 startAutoSync();
+// syncHunters();
 
 mongoose
   .connect(process.env.MONGO_URI)

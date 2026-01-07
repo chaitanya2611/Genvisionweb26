@@ -71,7 +71,7 @@ async function sendCredentials(email, password) {
 </p>
 
         <p>
-          🔗 <a href="https://linktr.ee/Genvision2025">Click here for events, speakers & schedule</a>
+          🔗 <a href="https://linktr.ee/Genvision2026">Click here for events, speakers & schedule</a>
         </p>
 
         <h3>📍 Event Details</h3>

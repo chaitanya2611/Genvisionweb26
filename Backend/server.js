@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import cron from "cron";
 import https from "https";
 import startAutoSync from "./middleware/autoSync.js";
-import syncHunters from "./middleware/treasureHunt.js";
+import starthunterSync from "./middleware/autoHunterSync.js";
 import Event from "./models/Event.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -53,7 +53,7 @@ app.use("/api/about", aboutRouter);
 app.use("/api/colleges", collegeRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 startAutoSync();
-// syncHunters();
+// starthunterSync();
 
 mongoose
   .connect(process.env.MONGO_URI)

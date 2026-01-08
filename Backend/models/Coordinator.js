@@ -5,6 +5,7 @@ const coordinatorSchema = new mongoose.Schema({
   designation: String,
   contact: { type: String, unique: true },
   image: String,
+  image2: String,
 
   // multiple events he/she coordinates
 });

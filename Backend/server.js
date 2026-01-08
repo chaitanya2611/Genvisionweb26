@@ -53,7 +53,7 @@ app.use("/api/about", aboutRouter);
 app.use("/api/colleges", collegeRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 startAutoSync();
-// starthunterSync();
+starthunterSync();
 
 mongoose
   .connect(process.env.MONGO_URI)

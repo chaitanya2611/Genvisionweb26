@@ -73,6 +73,14 @@ async function sendCredentials(email, password) {
         <p>
           🔗 <a href="https://linktr.ee/Genvision2026">Click here for events, speakers & schedule</a>
         </p>
+        <p>To stay updated with important announcements, schedules, and live updates, we invite you to join our official Genvision WhatsApp Community.</p>
+
+  <p><strong>👉 Join here:</strong><br/>
+  <a href="https://chat.whatsapp.com/EKGdRB2F6DkBQCf8qtC7hE">
+    Genvision WhatsApp Community
+  </a></p>
+
+  <p><strong>Note:</strong> Before joining the group, please make sure you have enrolled and registered for the events.</p>
 
         <h3>📍 Event Details</h3>
         <p>

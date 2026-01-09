@@ -2,6 +2,8 @@
 import express from "express";
 import Participant from "../models/Participant.js";
 import transporter from "../middleware/transporter.js";
+import { sendMail } from "../middleware/sendmail.js";
+import { accommodationConfirmedTemplate } from "../middleware/mailTemplates.js";
 
 const router = express.Router();
 
@@ -45,7 +47,7 @@ router.post("/send-mass-mail", async (req, res) => {
 
       await transporter.sendMail({
         from: `"Genvision Team" <${process.env.EMAIL_USER1}>`,
-        to: p.email,
+        to: "25m0126@iitb.ac.in",
         subject: SUBJECT,
         html: `
           <p>Hi ${p.fullName || " "},</p>
@@ -70,6 +72,83 @@ router.post("/send-mass-mail", async (req, res) => {
   } catch (err) {
     console.error("❌ Mass mail failed:", err);
     res.status(500).json({ success: false });
+  }
+});
+
+router.post("/accommodation-confirmed", async (req, res) => {
+  try {
+    const confirmedParticipants = await Participant.find({
+      accommodationStatus: "confirmed",
+    });
+
+    if (confirmedParticipants.length === 0) {
+      console.log("⚠️ Ekahi CONFIRMED participant nahi");
+      return res.status(400).json({
+        message: "Ekahi CONFIRMED participant nahi",
+      });
+    }
+
+    console.log(
+      `🚀 Mail process start | Total: ${confirmedParticipants.length}`
+    );
+
+    for (let i = 0; i < confirmedParticipants.length; i++) {
+      const p = confirmedParticipants[i];
+
+      console.log(
+        `📨 [${i + 1}/${confirmedParticipants.length}] Initializing mail → ${
+          p.email
+        }`
+      );
+
+      await sendMail({
+        to: p.email,
+        subject: "Accommodation Confirmed – Genvision 2026 🏨",
+        html: accommodationConfirmedTemplate(p.fullName),
+      });
+
+      console.log(
+        `✅ [${i + 1}/${
+          confirmedParticipants.length
+        }] Mail sent successfully → ${p.email}`
+      );
+    }
+
+    console.log("🎯 All accommodation mails sent successfully");
+
+    res.json({
+      message: `✅ ${confirmedParticipants.length} participants la mail pathavla`,
+    });
+  } catch (err) {
+    console.error("💥 Mail process failed:", err);
+    res.status(500).json({ message: "Mail failed" });
+  }
+});
+
+router.post("/accommodation-test", async (req, res) => {
+  try {
+    console.log("🔥 BODY:", req.body);
+
+    const { email } = req.body;
+
+    if (!email || email.trim() === "") {
+      return res.status(400).json({ message: "Valid email required" });
+    }
+
+    console.log(`🧪 Test mail initializing → ${email}`);
+
+    await sendMail({
+      to: email.trim(),
+      subject: "Accommodation Confirmed – Genvision 2026 🏨",
+      html: accommodationConfirmedTemplate("Test User"),
+    });
+
+    console.log(`✅ Test mail sent successfully → ${email}`);
+
+    res.json({ message: "Test mail sent successfully" });
+  } catch (err) {
+    console.error("💥 Test mail failed:", err);
+    res.status(500).json({ message: "Test mail failed" });
   }
 });
 

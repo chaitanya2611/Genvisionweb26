@@ -78,7 +78,7 @@ router.post("/send-mass-mail", async (req, res) => {
 router.post("/accommodation-confirmed", async (req, res) => {
   try {
     const confirmedParticipants = await Participant.find({
-      accommodationStatus: "confirmed",
+      accommodationStatus: "pending",
     });
 
     if (confirmedParticipants.length === 0) {
@@ -103,7 +103,7 @@ router.post("/accommodation-confirmed", async (req, res) => {
 
       await sendMail({
         to: p.email,
-        subject: "Accommodation Confirmed – Genvision 2026 🏨",
+        subject: "Welcome to Genvision 2026",
         html: accommodationConfirmedTemplate(p.fullName),
       });
 
@@ -139,8 +139,12 @@ router.post("/accommodation-test", async (req, res) => {
 
     await sendMail({
       to: email.trim(),
-      subject: "Accommodation Confirmed – Genvision 2026 🏨",
+      subject: "Welcome to Genvision 2026",
       html: accommodationConfirmedTemplate("Test User"),
+      // attachments: [
+      //   "IIT Bombay Map_Genvision 2026.png",
+      //   "schedule genvision 2026.pdf",
+      // ],
     });
 
     console.log(`✅ Test mail sent successfully → ${email}`);

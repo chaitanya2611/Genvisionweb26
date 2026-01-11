@@ -1,5 +1,6 @@
 // utils/sendMail.js
 import nodemailer from "nodemailer";
+import path from "path";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -9,11 +10,15 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendMail({ to, subject, html }) {
+export async function sendMail({ to, subject, html, attachments = [] }) {
   await transporter.sendMail({
-    from: `"Team Genvision" <${process.env.EMAIL_USER1}>`,
+    from: `"Team GenVision" <${process.env.EMAIL_USER1}>`,
     to,
     subject,
     html,
+    // attachments: attachments.map((file) => ({
+    //   filename: file, // mail madhe disel
+    //   path: path.join(process.cwd(), "uploads", file), // uploads folder path
+    // })),
   });
 }
